@@ -1,0 +1,31 @@
+{
+  "name": "dotenvalid",
+  "version": "1.0.0",
+  "description": "A minimal TypeScript-based package for loading and validating .env files with type checking",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"No tests specified\" && exit 0",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "dotenv",
+    "environment",
+    "env",
+    "type",
+    "validation",
+    "typescript"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.7.3",
+    "@types/node": "^20.17.0"
+  },
+  "files": [
+    "dist",
+    "src"
+  ]
+}
