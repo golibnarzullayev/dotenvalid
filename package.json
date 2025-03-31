@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "npx tsup src/index.ts --format esm,cjs --minify",
     "test": "echo \"No tests specified\" && exit 0",
     "prepare": "npm run build",
     "prepublishOnly": "npm run build"
@@ -20,14 +20,13 @@
   ],
   "author": "Your Name",
   "license": "MIT",
-  "dependencies": {},
   "devDependencies": {
-    "typescript": "^5.7.3",
-    "@types/node": "^20.17.0"
+    "@types/node": "^20.17.0",
+    "tsup": "^8.4.0",
+    "typescript": "^5.7.3"
   },
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "repository": {
     "type": "git",
