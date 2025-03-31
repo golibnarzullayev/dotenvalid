@@ -2,7 +2,7 @@
 
 `dotenvalid` is a simple yet powerful dotenv library for Node.js and TypeScript. With this package, you can easily read the `.env` file, define variable types, set default values, and manage optional environment variables.
 
-## Installation
+# Installation
 
 Install via NPM:
 
