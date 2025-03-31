@@ -1,6 +1,6 @@
 {
   "name": "dotenvalid",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A minimal TypeScript-based package for loading and validating .env files with type checking",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
