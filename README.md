@@ -1,19 +1,25 @@
-# dotenvify
+# dotenvalid
 
-`dotenvify` is a simple yet powerful dotenv library for Node.js and TypeScript. With this package, you can easily read the `.env` file, define variable types, set default values, and manage optional environment variables.
+`dotenvalid` is a simple yet powerful dotenv library for Node.js and TypeScript. With this package, you can easily read the `.env` file, define variable types, set default values, and manage optional environment variables.
 
 ## Installation
 
 Install via NPM:
 
 ```bash
-npm install dotenvify
+npm install dotenvalid
 ```
 
 Or via PNPM:
 
 ```bash
-pnpm install dotenvify
+pnpm install dotenvalid
+```
+
+Or via YARN:
+
+```bash
+yarn add dotenvalid
 ```
 
 # Usage
@@ -23,7 +29,7 @@ Use the loadEnv function to read the `.env` file and work with type-safe environ
 ### Example:
 
 ```typescript
-import { loadEnv } from "dotenvify";
+import { loadEnv } from "dotenvalid";
 
 const env = loadEnv({
   NODE_ENV: { choices: ['localhost', 'development', 'production'] }
