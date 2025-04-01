@@ -1,23 +1,22 @@
 import { loadDotenv } from "./parser";
-import { EnvConfig, EnvSchema, EnvType } from "./type";
+import { Env, EnvSchemaType } from "./type";
 
-export function loadEnv<T extends Record<string, EnvConfig>>(
-  schema: T
-): EnvSchema<T> {
+export function loadEnv<T extends Record<string, EnvSchemaType>>(
+  config: T
+): Env<T> {
   loadDotenv();
-  const parsedEnv = {} as EnvSchema<T>;
 
-  for (const key in schema) {
-    const config = schema[key];
-    let value: string | undefined = process.env[key];
+  const parsedEnv: Record<string, string> = {};
 
-    const type: EnvType = config.type || "string";
+  for (const key in config) {
+    const { type, default: defaultValue, optional } = config[key];
+
+    let value = process.env[key];
 
     if (value === undefined) {
-      if (config.default !== undefined) {
-        parsedEnv[key] = config.default as EnvSchema<T>[typeof key];
-        continue;
-      } else if (!config.optional) {
+      if (defaultValue !== undefined) {
+        value = String(defaultValue);
+      } else if (!optional) {
         throw new Error(`Missing required environment variable: ${key}`);
       }
     }
@@ -25,31 +24,37 @@ export function loadEnv<T extends Record<string, EnvConfig>>(
     if (value !== undefined) {
       switch (type) {
         case "string":
-          parsedEnv[key] = value as any;
+          parsedEnv[key] = value;
           break;
         case "number":
           const parsedNumber = Number(value);
-          if (isNaN(parsedNumber))
+          if (isNaN(parsedNumber)) {
             throw new Error(`Environment variable ${key} should be a number`);
-          parsedEnv[key] = parsedNumber as EnvSchema<T>[typeof key];
+          }
+          parsedEnv[key] = value;
           break;
         case "boolean":
-          if (value !== "true" && value !== "false")
-            throw new Error(`Environment variable ${key} should be a boolean`);
-          parsedEnv[key] = (value === "true") as EnvSchema<T>[typeof key];
+          if (value !== "true" && value !== "false") {
+            throw new Error(
+              `Environment variable ${key} should be a boolean (true/false)`
+            );
+          }
+          parsedEnv[key] = value;
           break;
         case "json":
           try {
-            parsedEnv[key] = JSON.parse(value) as EnvSchema<T>[typeof key];
-          } catch {
-            throw new Error(`Environment variable ${key} should be valid JSON`);
+            parsedEnv[key] = JSON.parse(value);
+          } catch (e) {
+            throw new Error(
+              `Environment variable ${key} should be a valid JSON`
+            );
           }
           break;
         case "url":
           try {
             new URL(value);
-            parsedEnv[key] = value as EnvSchema<T>[typeof key];
-          } catch {
+            parsedEnv[key] = value;
+          } catch (e) {
             throw new Error(
               `Environment variable ${key} should be a valid URL`
             );
@@ -59,18 +64,29 @@ export function loadEnv<T extends Record<string, EnvConfig>>(
           throw new Error(`Unsupported type for environment variable: ${key}`);
       }
 
-      if (
-        config.choices &&
-        !config.choices.includes(parsedEnv[key] as string)
-      ) {
-        throw new Error(
-          `Environment variable ${key} should be one of: ${config.choices.join(
-            ", "
-          )}`
-        );
+      if ("choices" in config[key]) {
+        const choices = config[key]["choices"];
+
+        if (Array.isArray(choices) && choices.length > 0) {
+          if (typeof parsedEnv[key] === typeof choices[0]) {
+            if (choices && !choices.includes(parsedEnv[key])) {
+              throw new Error(
+                `Environment variable ${key} should be one of: ${choices.join(
+                  ", "
+                )}`
+              );
+            }
+          } else {
+            throw new Error(
+              `Environment variable ${key} has an invalid type. Expected ${typeof choices[0]} but got ${typeof parsedEnv[
+                key
+              ]}.`
+            );
+          }
+        }
       }
     }
   }
 
-  return parsedEnv;
+  return parsedEnv as Env<T>;
 }

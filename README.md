@@ -32,12 +32,12 @@ Use the loadEnv function to read the `.env` file and work with type-safe environ
 import { loadEnv } from "dotenvalid";
 
 const env = loadEnv({
-  NODE_ENV: { choices: ['localhost', 'development', 'production'] }
+  NODE_ENV: { type: 'string', choices: ['localhost', 'development', 'production'] }
   PORT: { type: "number", default: 3000 },
   DEBUG: { type: "boolean", default: false },
-  API_KEY: { optional: true },
+  API_KEY: { type: 'string', optional: true },
   ALLOWED_ORIGINS: { type: "json", default: '["https://example.com"]' },
-  API_BASE_URL: { type: "url" },
+  API_BASE_URL: { type: 'string', type: "url" },
 });
 
 console.log(env.PORT); // number
