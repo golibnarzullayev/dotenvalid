@@ -45,7 +45,5 @@ export type Env<T extends Record<string, EnvSchemaType>> = {
     ? T[K]["optional"] extends true
       ? EnvTypeMap[T[K]["type"]] | undefined
       : EnvTypeMap[T[K]["type"]]
-    : T[K]["default"] extends EnvTypeMap[T[K]["type"]]
-    ? EnvTypeMap[T[K]["type"]]
-    : never;
+    : EnvTypeMap[T[K]["type"]];
 };
