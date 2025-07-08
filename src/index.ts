@@ -2,9 +2,10 @@ import { loadDotenv } from "./parser";
 import { Env, EnvSchemaType } from "./type";
 
 export function loadEnv<T extends Record<string, EnvSchemaType>>(
-  config: T
+  config: T,
+  filePath: string = ".env"
 ): Env<T> {
-  loadDotenv();
+  loadDotenv(filePath);
 
   const parsedEnv: Record<string, string> = {};
 
